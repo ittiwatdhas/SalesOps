@@ -1,0 +1,306 @@
+<template>
+  <div
+    class="comment-dialog"
+    v-click-outside="outsideComment"
+    v-show="option.display"
+    :style="{'top': option.top +'px','left': option.left +'px','position':'absolute','z-index':'1000'}"
+  >
+    <div class="comment-head" style="text-align:left">{{title}}</div>
+    <div class="comment-body" @scroll="handleScroll">
+      <div v-for="(row, rowIndex) in data" :key="row.id + rowIndex" :value="row.id">
+        <div
+          :style="{'background': row.status == 'Y'?'#FFFFFF':'#FDF5DF' , 
+                    'padding':'5px 10px 8px 10px', 'width':'100%', 'cursor': row.status == 'Y'?'':'pointer' , 
+                    'border-bottom':'solid 0.1px #DDDDDD'}"
+        >
+          <div style="display:flex">
+            <div class="md-rectangle-icon medium lightgray"></div>
+            <div style="line-height:17px;padding-top:7px;text-align: -webkit-auto;">
+              <div class="name-txt">{{row.name}} {{row.emp_id}}</div>
+              <div class="time-txt">{{formatTime(row.createdate , 1)}}</div>
+            </div>
+          </div>
+          <div class="comment-txt">{{row.comment}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="comment-footer">
+      <md-input-container class="-no-line" style="height:48px;min-height:48px;">
+        <md-input
+          placeholder="add a comment"
+          v-model="txtComment"
+          @click.native="read"
+          style="height:48px;min-height:48px;"
+        ></md-input>
+      </md-input-container>
+      <md-button class="cancel-btn" @click="reply">
+        <label>Reply</label>
+      </md-button>
+      <md-button class=" reply-btn" @click="close" style="width: 88px;">
+        <label>Cancel</label>
+      </md-button>
+    </div>
+  </div>
+</template>
+<script>
+import Vue from "vue";
+import moment from "moment";
+export default {
+  created() {},
+  props: ["data", "title", "option"],
+  data() {
+    return {
+      comments: "",
+      txtComment: "",
+      txtMonth: "thismonth",
+      showComment: false
+    };
+  },
+  // watch: {
+  //   keyword(value) {
+  //     // if (value == "") {
+  //     //   this.getPromotionSet("search");
+  //     // }
+  //   }
+  // },
+  methods: {
+    read() {
+      this.$emit("read", this.data);
+    },
+    handleScroll(event) {
+      this.$emit("handleScroll", event);
+    },
+    formatTime(value, type) {
+      const date = moment(value);
+      let txt_date = "";
+      if (date.format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")) {
+        txt_date = date.format("H:mm:ss A") + " Today";
+      } else if (
+        date.format("YYYY-MM-DD") ==
+        moment()
+          .add(-1, "days")
+          .format("YYYY-MM-DD")
+      ) {
+        txt_date = date.format("H:mm:ss A") + " Yesterday";
+      } else if (moment().diff(date, "days") < 7) {
+        txt_date = date.format("H:mm:ss A") + " " + date.format("dddd");
+      } else {
+        if (type > 0) {
+          txt_date = date.format("dddd DD,") + " " + date.format("H:mm:ss A");
+        } else {
+          txt_date =
+            date.format("dddd MMM DD, YYYY") + " " + date.format("H:mm:ss A");
+        }
+      }
+      return txt_date;
+    },
+    reply() {
+      if (this.txtComment != "") {
+        let temp = {
+          id: "new",
+          position: Vue.localStorage.get("department"),
+          emp_id: Vue.localStorage.get("emp_id"),
+          first_name: Vue.localStorage.get("first_name"),
+          last_name: Vue.localStorage.get("last_name"),
+          status: "N",
+          comment: this.txtComment.trim(),
+          emp_id_start: "",
+          msg_to: ""
+        };
+        this.txtComment = "";
+        this.$emit("reply", temp);
+      } else {
+        this.$emit("reply", null);
+      }
+    },
+    close() {
+      this.$emit("close", false);
+    },
+    showDateTime(createdate, type) {
+      const date = moment(createdate);
+      let txt_date = "";
+      if (date.format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")) {
+        txt_date = date.format("H:mm:ss A") + " Today";
+      } else if (
+        date.format("YYYY-MM-DD") ==
+        moment()
+          .add(-1, "days")
+          .format("YYYY-MM-DD")
+      ) {
+        txt_date = date.format("H:mm:ss A") + " Yesterday";
+      } else if (moment().diff(date, "days") < 7) {
+        txt_date = date.format("H:mm:ss A") + " " + date.format("dddd");
+      } else {
+        if (type > 0) {
+          txt_date = date.format("dddd DD,") + " " + date.format("H:mm:ss A");
+        } else {
+          txt_date =
+            date.format("dddd MMM DD, YYYY") + " " + date.format("H:mm:ss A");
+        }
+      }
+      return txt_date;
+    },
+    outsideComment(e) {
+      if (
+        e.target.className != "comment-dialog" &&
+        e.target.className !=
+          "md-icon comment-btn md-theme-default material-icons" &&
+        e.target.className != "sub-title md-pointer" &&
+        e.target.className != "md-button md-icon-button md-theme-default"
+      ) {
+        this.$emit("close", false);
+      }
+    },
+  },
+  directives: {
+    "click-outside": {
+      bind: function(el, binding, vNode) {
+        // Provided expression must evaluate to a function.
+        if (typeof binding.value !== "function") {
+          const compName = vNode.context.name;
+          let warn = `[Vue-click-outside:] provided expression '${binding.expression}' is not a function, but has to be`;
+          if (compName) {
+            warn += `Found in component '${compName}'`;
+          }
+
+          //   console.warn(warn);
+        }
+        // Define Handler and cache it on the element
+        const bubble = binding.modifiers.bubble;
+        const handler = e => {
+          if (bubble || (!el.contains(e.target) && el !== e.target)) {
+            binding.value(e);
+          }
+        };
+        el.__vueClickOutside__ = handler;
+
+        // add Event Listeners
+        document.addEventListener("click", handler);
+      },
+
+      unbind: function(el, binding) {
+        // Remove Event Listeners
+        document.removeEventListener("click", el.__vueClickOutside__);
+        el.__vueClickOutside__ = null;
+      }
+    }
+  }
+};
+</script>
+<style lang="scss" scoped>
+$color-primary: #fd7f00;
+$color-green: #66bb6a;
+$color-red: #f44336;
+$color-light-gray: #efefef;
+$font-roboto: Roboto;
+$font-lato: Lato;
+$font-kanit: Kanit;
+.comment-dialog {
+  width: 250px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12);
+  .comment-head {
+    height: 32px;
+    color: #727272;
+    font-family: $font-lato;
+    font-size: 15px;
+    background: $color-light-gray;
+    padding-left: 10px;
+    padding-top: 6px;
+    font-weight: bold;
+    border-bottom: solid 0.1px #dddddd;
+  }
+  .comment-footer {
+    background: $color-light-gray;
+    padding: 10px;
+    .md-input-container {
+      margin: unset;
+      padding-left: 10px;
+      height: 28px;
+      background: white;
+      border-radius: 4px;
+      min-height: 28px;
+      padding-top: 1px;
+      box-shadow: 0 0px 3px rgba(0, 0, 0, 0.16), 0 0px 0px rgba(0, 0, 0, 0),
+        0 1px 1px -2px rgba(0, 0, 0, 0);
+      input {
+        height: 28px;
+        font-size: 14px;
+      }
+    }
+    .md-button {
+      height: 30px;
+      min-height: 24px;
+      box-shadow: unset;
+      font-size: 12px;
+      line-height: 14px;
+      margin-left: unset;
+      margin-top: 10px;
+      width: 88px;
+      &.reply-btn {
+        color: #ffffff;
+        background: #a8a8a8;
+      }
+      &.cancel-btn {
+        background: $color-primary;
+        color: #ffffff;
+      }
+    }
+    .reply-btn:hover {
+      background: #a8a8a8;
+    }
+    .cancel-btn:hover {
+      background: $color-primary;
+    }
+  }
+  .comment-body {
+    max-height: 200px;
+    // max-height: 170px;
+    // max-height: calc(100vh - 350px);
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    .md-rectangle-icon {
+      &.medium {
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
+        min-height: 32px;
+      }
+    }
+    .position-txt {
+      color: rgba(0, 0, 0, 0.87);
+      font-size: 9px;
+      font-family: $font-lato;
+      font-weight: bold;
+    }
+    .name-txt {
+      font-family: $font-kanit;
+      color: #767676;
+      font-size: 12px;
+    }
+    .time-txt {
+      color: #a8a8a8;
+      font-size: 10px;
+      font-family: $font-lato;
+    }
+    .comment-txt {
+      font-family: $font-kanit;
+      text-align: left;
+      font-size: 13px;
+      margin-bottom: 5px;
+      color: #727272;
+    }
+  }
+  .comment-body::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+    background: #ffffff;
+  }
+  .comment-body::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.11);
+    border-radius: 5px;
+  }
+}
+</style>
+

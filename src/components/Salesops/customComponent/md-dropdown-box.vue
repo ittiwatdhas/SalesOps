@@ -1,0 +1,165 @@
+<template>
+    <div id="orderhis_select_staus" class="md-dropdown-box" @mouseleave="mouseLeave">
+    <md-input-container id="orderhis_select_staus" md-theme class="dropdown-box" @click.native="getWidth($event)">
+      <md-input
+        id="orderhis_select_staus"
+        @keypress.native="showAutocom = true"
+        @focus="openAutoCom"
+        :placeholder="placeholder"
+        v-on:change="filter"
+        v-model="txtSearch"
+        @focus.native="$event.target.select()"
+        readonly
+        :class="tempId"
+      ></md-input>
+          <md-button  id="orderhis_select_staus" class="md-icon-button" @click.native="showAutocom = true">
+          <md-icon  id="orderhis_select_staus" style="padding-top:1px">arrow_drop_down</md-icon>
+      </md-button>
+    </md-input-container>
+    <md-card class="text-autocomplete" v-if="showAutocom" :style="{'width' : widthTag +'px'}">
+      <div class="no-data-promo" v-if="data.length == 0 ">
+        <span>No data....</span>
+      </div>
+      <ul class="md-list" v-else>
+        <li class="md-list-item" v-for="(item,index) in data" :key="'cg'+index">
+          <div class="md-list-item-row" @click="choose(item,index)">
+            <div style="long-row">
+              <span v-if="item.code != ''">{{item.code}}&nbsp;:</span>
+              <span class="descript">{{item.title}}</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </md-card>
+  </div>
+</template>
+
+<script>
+export default {
+  create() {},
+  props: ["value", "placeholder", "data"],
+  data() {
+    let random = Math.random();
+    return {
+      showAutocom: false,
+      cancelSearch: false,
+      txtSearch: "",
+      widthTag: 0,
+      tempId: random + "w"
+    };
+  },
+  methods: {
+    mouseLeave: function() {
+      if (this.showAutocom == true) {
+        this.showAutocom = false;
+        this.txtSearch = "";
+      }
+    },
+    getWidth(e) {
+      // this.widthTag = e.path[2].offsetWidth;
+      this.widthTag =  document.getElementById('orderhis_select_staus').offsetWidth
+    },
+    openAutoCom() {
+      this.showAutocom = true;
+    },
+    choose(value, key) {
+      this.showAutocom = false;
+      this.txtSearch = value.code + " " + value.title;
+      this.cancelSearch = true;
+      this.$emit("choose", value, key);
+    },
+    filter(param) {
+      if (param.length > 2) {
+        this.cancelSearch = true;
+        this.$emit("filter", param.trim());
+      } else {
+        this.cancelSearch = false;
+        this.$emit("filter", "");
+      }
+    }
+  }
+};
+</script>
+<style lang="scss" scoped>
+$font-lato: Lato;
+$font-roboto: Roboto;
+$font-kanit: Kanit;
+.md-dropdown-box {
+  width: 100%;
+  .md-input {
+    cursor: pointer;
+  }
+  .md-input-container.md-has-value input {
+    font-size: 14px;
+  }
+  .md-input-container {
+    height: 36px;
+    min-height: 36px;
+    margin: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+    padding-left: 20px;
+    .md-icon {
+      padding: unset;
+    }
+  }
+  .md-input-container:after {
+    content: none;
+  }
+  .text-autocomplete {
+    position: absolute;
+    z-index: 31;
+    // width: 100%;
+    max-height: 250px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
+    padding: 5px 0 10px 0;
+    overflow-x: hidden;
+    font-size: 14px;
+    .no-data-promo {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .md-list-item {
+      color: #5a5a5a;
+      padding: 0 0 0 0;
+      font-family: $font-roboto;
+
+      .md-list-item-row {
+        padding-top: 6px;
+        display: flex;
+        font-family: $font-lato;
+        padding-bottom: 6px;
+        padding-right: 20px;
+        padding-left: 20px;
+        text-align: left;
+      }
+      .long-row {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+        overflow: hidden;
+      }
+      .descript {
+        font-family: $font-kanit;
+      }
+    }
+    .md-list-item:hover {
+      background: #efefef;
+      cursor: pointer;
+    }
+  }
+  .text-autocomplete::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+    background: #f7f7f7;
+  }
+  .text-autocomplete::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.11);
+    border-radius: 5px;
+  }
+  & .dropdown-box {
+    box-shadow: 0 0 0.8px rgba(0, 0, 0, 0.16);
+  }
+}
+</style>

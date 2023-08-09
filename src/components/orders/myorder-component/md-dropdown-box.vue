@@ -1,0 +1,160 @@
+<template>
+  <div  id="w-11"   class="md-dropdown-box" v-click-outside="mouseLeave">
+    <!-- <div class="md-dropdown-ox" @mouseleave="mouseLeave"> -->
+    <md-input-container   md-theme class="dropdown-box" @click.native="getWidth($event)">
+      <md-input
+        @keypress.native="showAutocom = true"
+        :placeholder="placeholder"
+        @focus.native="$event.target.select()"
+        v-model="value"
+        readonly
+        :class="tempId"
+      ></md-input>
+      <md-button  class="md-icon-button" @click.native="showAutocom = true">
+        <md-icon style="padding-top:1px">arrow_drop_down</md-icon>
+      </md-button>
+    </md-input-container>
+    <md-card class="text-autocomplete" v-if="showAutocom" :style="{'width' : widthTag +'px'}">
+      <div class="no-data-promo" v-if="data.length == 0 ">
+        <span>No data....</span>
+      </div>
+      <ul class="md-list" v-else>
+        <li class="md-list-item" v-for="(item,index) in data" :key="'cg'+index">
+          <div class="md-list-item-row" @click="choose(item,index)">
+            <div style="long-row">
+              <span v-if="item.code != ''">{{item.code}}&nbsp;</span>
+              <span class="descript">{{item.title}}</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </md-card>
+  </div>
+</template>
+
+<script>
+import ClickOutside from "vue-click-outside";
+export default {
+  create() {},
+  props: ["value", "placeholder", "data"],
+  data() {
+    let random = Math.random();
+    return {
+      showAutocom: false,
+      widthTag: 0,
+      tempId: random + "w"
+    };
+  },
+  directives: {
+    ClickOutside
+  },
+  methods: {
+    mouseLeave: function() {
+      if (this.showAutocom == true) {
+        this.showAutocom = false;
+      }
+    },
+    getWidth(e) {
+      if(document.getElementById('w-11') == null ){
+        this.widthTag = document.getElementById('dp-discount').offsetWidth
+      }else {
+        this.widthTag = document.getElementById('w-11').offsetWidth
+      }
+     
+
+    },
+    openAutoCom() {
+      this.showAutocom = true;
+    },
+    choose(value, key) {
+      this.showAutocom = false;
+      this.$emit("input", value.code + " " + value.title);
+      this.$emit("choose", value, key);
+    }
+  }
+};
+</script>
+<style lang="scss" scoped>
+$font-lato: Lato;
+$font-roboto: Roboto;
+$font-kanit: Kanit;
+.md-dropdown-box {
+  width: 100%;
+   box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
+   border-radius: 4px;
+  .md-input {
+    cursor: pointer;
+  }
+  .md-input-container.md-has-value input {
+    font-size: 14px;
+  }
+  .md-input-container {
+    height: 36px;
+    min-height: 36px;
+    margin: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+    padding-left: 20px;
+    .md-icon {
+      padding: unset;
+    }
+  }
+  .md-input-container:after {
+    content: none;
+  }
+  .text-autocomplete {
+    position: absolute;
+    z-index: 31;
+    // width: 100%;
+    max-height: 250px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
+    padding: 5px 0 10px 0;
+    overflow-x: hidden;
+    font-size: 14px;
+    .no-data-promo {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .md-list-item {
+      color: #5a5a5a;
+      padding: 0 0 0 0;
+      font-family: $font-roboto;
+
+      .md-list-item-row {
+        padding-top: 6px;
+        display: flex;
+        font-family: $font-lato;
+        padding-bottom: 6px;
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+      .long-row {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+        overflow: hidden;
+      }
+      .descript {
+        font-family: $font-kanit;
+      }
+    }
+    .md-list-item:hover {
+      background: #efefef;
+      cursor: pointer;
+    }
+  }
+  .text-autocomplete::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+    background: #f7f7f7;
+  }
+  .text-autocomplete::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.11);
+    border-radius: 5px;
+  }
+  & .dropdown-box {
+    box-shadow: 0 0 0.8px rgba(0, 0, 0, 0.16);
+  }
+}
+</style>

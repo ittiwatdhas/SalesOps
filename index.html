@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Sales Ops</title>
+    <link rel="shortcut icon" type="image/png" href="~@/assets/images/tripplan.png"/>
+
+    <script type='text/javascript' src='./static/config.js'></script>
+
+    <div>
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id="+customConfigs.googleTagManage
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+      </div>
+  
+    <!--<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,400,500,700,400italic">-->
+    
+    <!--close by tidarat-->
+    <!-- <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,400">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Kanit:200,300,400">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Avenir">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Helvetica Neue">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Proxima Nova">
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons"> -->
+    
+    <!--  <script async src='https://www.google-analytics.com/analytics.js'></script>   -->
+
+
+    <!--   <script>
+   static/img/tripplan.png
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-103798171-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+ -->
+
+
+ <script async src="https://www.googletagmanager.com/gtag/js?id="+customConfigs.googleAnalytics_new></script>
+
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', customConfigs.googleAnalytics_new);
+
+  console.log('Google TagManage - Index => ',customConfigs.googleTagManage);
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f)
+    })(window,document,'script','dataLayer',customConfigs.googleTagManage);
+    // G-FFR2TBFPRL - Google Analytics (DEP)
+    // G-1CPTFCVY2G - Google Analytics (DEV)
+
+// GET LOCATION
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(this.showPosition);
+  } else { 
+    y.innerHTML = "Geolocation is not supported by this browser.";
+  }
+  function  showPosition(position) {
+    let lat = position.coords.latitude;
+    let long = position.coords.longitude;
+    let rs_location = {lat:lat,long:long}
+    localStorage.setItem("MARK_LOCATION", JSON.stringify(rs_location));
+    console.log(position.coords.latitude ,  position.coords.longitude )
+}
+
+// CHECK_DEVICE   
+    let w = window.screen.width;
+    let h = window.screen.height;
+    let rs_size = {W:w,H:h}
+    localStorage.setItem("SIZE_SCREEN",JSON.stringify(rs_size));
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+  // true for mobile device
+      localStorage.setItem("DETECTED_DEVICE", "mobile");
+      console.log('mobile device')
+    }else{
+      // false for not mobile device
+      localStorage.setItem("DETECTED_DEVICE", "not_mobile");
+       console.log('not mobile device')
+    }
+      console.log('test Google ',customConfigs.googleAnalytics_new)
+
+</script>
+
+</head>
+<body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+</body>
+
+</html>

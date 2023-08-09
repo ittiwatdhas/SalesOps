@@ -1,0 +1,67 @@
+const locales = {
+  'en': {
+	  /*Dashboard*/
+	  'das.dashboard' : 'DASHBOARD',
+	  'das.overall_sales_activity' : 'Overall Sales Activity',
+	  'das.number_of_visits' : 'Number of Visits',
+	  'das.overview' : 'Overview',
+	  'das.sales_team' : 'Sales Team',
+	  'das.team' : 'Team',
+	  'das.summary' : 'Summary',
+	  'das.sales_activity_coverage' : 'SALES ACTIVITY COVERAGE',
+	  'das.on_track' : 'On Track',
+	  'das.issue' : 'Issue',
+	  'das.in_active' : 'In-active',
+	  'das.Visits this Week' : 'Visits this Week',
+	  'das.Visits Today' : 'Visits Today',
+	  'das.Avg. Daily Visits' : 'Avg. Daily Visits',
+	  'das.Rate of Success. Trips' : 'Rate of Success. Trips',
+	  'das.Weekly Active' : 'Weekly Active',
+	  'das.Daily Active' : 'Daily Active',
+	  'das.Trip Plan Visits' : 'Trip Plan Visits',
+	  'das.Monthly Active' : 'Monthly Active',
+	  'das.' : '',
+	  'das.Mark Pending' : 'Mark Pending',
+	  'das.Mark Resolved' : 'Mark Resolved',
+	  'das.View Activity Log' : 'View Activity Log',
+	  'das.salesman' : 'SALESMEN',
+	  'das.Daily Unplan' : 'Daily Unplan',
+	  'das.Weekly Unplan' : 'Weekly Unplan',
+	  'das.Monthly Unplan' : 'Monthly Unplan',
+	  
+    'SALE TRIP PLAN': 'SALES TRIP PLAN'
+  },
+  'th': {
+	  /*Dashboard*/
+	  'das.dashboard' : 'DASHBOARD',
+	  'das.overall_sales_activity' : 'Overall Sales Activity',
+	  'das.number_of_visits' : 'Number of Visits',
+	  'das.overview' : 'Overview',
+	  'das.sales_team' : 'Sales Team',
+	  'das.team' : 'Team',
+	  'das.summary' : 'Summary',
+	  'das.sales_activity_coverage' : 'SALES ACTIVITY COVERAGE',
+	  'das.on_track' : 'On Track',
+	  'das.issue' : 'Issue',
+	  'das.in_active' : 'In-active',
+	  'das.Visits this Week' : 'Visits this Week',
+	  'das.Visits Today' : 'Visits Today',
+	  'das.Avg. Daily Visits' : 'Avg. Daily Visits',
+	  'das.Rate of Success. Trips' : 'Rate of Success. Trips',
+	  'das.Weekly Active' : 'Weekly Active',
+	  'das.Daily Active' : 'Daily Active',
+	  'das.Trip Plan Visits' : 'Trip Plan Visits',
+	  'das.Monthly Active' : 'Monthly Active',
+	  'das.' : '',
+	  'das.Mark Pending' : 'Mark Pending',
+	  'das.Mark Resolved' : 'Mark Resolved',
+	  'das.View Activity Log' : 'View Activity Log',
+	  'das.salesman' : 'SALESMEN',
+	  'das.Daily Unplan' : 'Daily Unplan',
+	  'das.Weekly Unplan' : 'Weekly Unplan',
+	  'das.Monthly Unplan' : 'Monthly Unplan',
+	  
+    'SALE TRIP PLAN' : 'แผนการเดินทางขาย'
+  }
+}
+export default locales
